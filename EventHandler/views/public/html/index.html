@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html ng-app = 'syookApp'>
+<head>
+	<title> Syook Socket Service </title>
+	<script src = 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js'></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script>
+		angular.module('syookApp',[])
+	</script>
+	<script src = '/socket.io/socket.io.js'></script>
+	<script>
+		var socket = io.connect('http://localhost:3000');
+		socket.on('news', function(data)
+		{
+			console.log("Data", data)
+			socket.emit('my other event', {my: 'data'})
+		})
+	</script>
+	
+</head>
+
+<body>
+	<div class = 'panel'>
+		<h3> God damn it </h3>
+		
+	</div>
+</body>
