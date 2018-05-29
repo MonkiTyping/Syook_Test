@@ -20,8 +20,8 @@ var dataSink = require('./routes/dataSink.js')
 
 io.on('connection', function(socket)
 {
-		
 	socket.emit('begin connect')
+	
 	socket.on('encrypted data', function(data)
 	{
 		var encryptedPacket = data['info']
@@ -29,12 +29,20 @@ io.on('connection', function(socket)
 		if (plain_text != {})
 		{
 			console.log("Success")
-			//Send plain_text to user
 		}
 	})
+	
+	
+	
 		
 })
 
+
+app.get('/', function(req,res)
+{
+	res.sendfile('./views/public/html/index.html')
+})
+ 
 
 
 server.listen(3000, function(req,res)
