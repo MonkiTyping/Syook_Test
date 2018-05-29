@@ -19,9 +19,12 @@ io.on('begin connect', function(data)
 	{
 		var payload = dataSource()
 		io.emit('encrypted data', {info: payload}) 
-	},3000)
-	
+	},8000)
+})
 
+io.on('fuck', function(data)
+{
+	console.log("Fuck", data)
 })
 
 

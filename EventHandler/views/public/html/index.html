@@ -11,11 +11,14 @@
 	<script src = '/socket.io/socket.io.js'></script>
 	<script>
 		var socket = io.connect('http://localhost:3000');
-		socket.on('news', function(data)
+		socket.emit('my other event', {data: "LameAF"})
+		socket.on('fuck', function(data)
 		{
-			console.log(data)
-			socket.emit('an event', {hello: "world"})
+			console.log("Fuck", data)
 		})
+		
+	</script>
+		
 	</script>
 	
 </head>
