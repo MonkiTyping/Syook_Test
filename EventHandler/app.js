@@ -3,8 +3,6 @@ var app = express()
 var crpyto = require('crypto')
 var path = require('path')
 
-
-
 var server = require('http').Server(app)
 var io = require('socket.io')(server);
 //var mongoose = require('mongoose')
@@ -21,17 +19,25 @@ io.on('connection', function(socket)
 	socket.on('encrypted data', function(data)
 	{
 		var encryptedPacket = data['info']
-		var plain_text = dataSink(encryptedPacket)
-		if (plain_text != {})
+		if (encryptedPacket == undefined)
 		{
-			console.log("Success")
-			//I'm scared of using the below. I will explain later
-			delete plain_text['secret_key']
-			io.emit('good old data', {data: plain_text})
+			io.emit('bad data', {data: "Packet lost during transmission"})
 		}
 		else
 		{
-			io.emit('bad data', {message: "Transmitted data is corrupted"})
+			var plain_text = dataSink(encryptedPacket)
+			if (plain_text != {})
+			{
+				console.log("Success")
+				plain_text['time_accessed'] = Date.now()
+				delete plain_text['secret_key']
+				//I'm scared of using the below. I will explain later
+				io.emit('good old data', {data: plain_text})
+			}
+			else
+			{
+				io.emit('bad data', {message: "Transmitted data is corrupted"})
+			}
 		}
 	})		
 	

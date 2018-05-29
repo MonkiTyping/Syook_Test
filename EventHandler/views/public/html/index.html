@@ -2,36 +2,48 @@
 <html ng-app = 'syookApp'>
 <head>
 	<title> Syook Socket Service </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src = 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js'></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src = '/socket.io/socket.io.js'></script>
 	<script>
 		angular.module('syookApp',[])
 	</script>
-	<script src = '/socket.io/socket.io.js'></script>
-	<script src = "js/handleEvent.js"></script>
-	<<!--script>
-		var socket = io.connect('http://localhost:3000');
-		//socket.emit('my other event', {data: "LameAF"})
-		socket.on('good old data', function(data)
-		{
-			console.log("Data has been deciphered", data)
-			return data;
-		})
-		socket.on('bad data', function(err)
-		{
-			console.log("Error : ", err['message'])
-		})
-		
-	</script>-->
-		
+	<script src = "js/defaultCtrl.js"></script>
 	</script>
 	
 </head>
 
-<body>
-	<div class = 'panel'>
-		<h3> God damn it </h3>
+<body ng-controller = 'dataViewController'>
+	<div class = 'container'>
+		<div class = 'panel'>
+			<div class = 'heading'>
+				<h1 class = 'well text-center'> Deciphered Data </h1>
+			</div>
+		</div>
 		
+		<table class = "table table-striped table-bordered" ng-controller = "dataViewController">
+			<thead>
+				<tr>
+					<td>#</td>
+					<td>NAME</td>
+					<td>ORIGIN</td>
+					<td>DESTINATION</td>
+					<td>ARRIVAL</td>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr ng-repeat = 'item in items'>
+					<td>{{$index + 1}}</td>
+					<td>{{item.name}}</td>
+					<td>{{item.origin}}</td>
+					<td>{{item.destination}}</td>
+					<td>{{item.time_accessed}}</td>
+				</tr>
+			</tbody>
+			
+		</table>
 	</div>
 </body>

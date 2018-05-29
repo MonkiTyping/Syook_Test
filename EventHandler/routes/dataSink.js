@@ -8,7 +8,7 @@ function decrypt(text)
 	var iv = new Buffer(textParts.shift(), 'hex');
 	if (iv.length < 1)
 	{
-		return 
+		return -1
 	}
 	var encryptedText = new Buffer(textParts.join(':'), 'hex');
 	
@@ -31,7 +31,11 @@ function createObjectFrom(items)
 		var temp = item.split('=')
 		var key = temp.shift()
 		var item = temp.shift()
-		object[key] = item
+		//Add key to object if key and value are present.
+		if (key && item)
+		{
+			object[key] = item
+		}
 	})
 	
 	return object
@@ -48,7 +52,8 @@ function decrypt_payload(transmission)
 		payload = payload.split('|')
 		payload.forEach(function(item)
 		{
-			if (item && item.length > 5)
+			//if (item && item.length > 5) Why item.length > 5 ?
+			if (item)
 			{
 				var plain_text = decrypt(item)
 				list.push(plain_text)
@@ -60,6 +65,7 @@ function decrypt_payload(transmission)
 
 function if_transmission_valid(transmission)
 {
+	
 	var transmitted_object = decrypt_payload(transmission)
 	var transmitted_checksum = CheckSum(transmitted_object)
 	

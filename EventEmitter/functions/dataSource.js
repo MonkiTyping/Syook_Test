@@ -16,28 +16,36 @@ function get_random_values()
 	
 	var random_first = Math.floor((Math.random() * 10 )% first_names.length)
 	var random_last = Math.floor((Math.random() * 10 ) % last_names.length)
-	random_first == random_last ? random_last =  (random_last + 1) % first_names.length : console.log('')
-	var payload = 
+	random_first == random_last ? random_first =  (random_first + 1) % first_names.length : console.log('')
+	var random_data = 
 	{
 		name: first_names[random_first] + ' ' + last_names[random_last],
 		origin: places[random_first],
 		destination: places[random_last]
 	}
-	return payload
+	return random_data
 }
 
 function encrypt(text) 
 {	
 	var iv = crypto.randomBytes(16);
+	//put in process.env
 	var hash = crypto.createHash('sha256').update('sY0o0kPasSw0rd4T3st').digest('hex').slice(0,32)
+	
 	var cipher = crypto.createCipheriv('aes-256-ctr', hash, iv);
 	var encrypted = cipher.update(text);
-
 	encrypted = Buffer.concat([encrypted, cipher.final()]);
 
-	var final = iv.toString('hex') + ':' + encrypted.toString('hex');
-
-	return final
+	var payload = iv.toString('hex') + ':' + encrypted.toString('hex');
+	
+	if ((payload.length - 49 > 0) && (0 < (499 - payload.length)))
+	{
+		return payload
+	}
+	else
+	{
+		return (crypto.randomBytes(300).toString('hex') + ';;')
+	}
 }
 
 function prepareTransmission()
