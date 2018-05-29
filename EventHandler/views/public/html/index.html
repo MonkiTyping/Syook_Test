@@ -32,7 +32,7 @@
 		</div>
 		
 		<div class = 'panel panel-default'>
-			<input type = 'text' class = 'form-control' placeholder = 'SEARCH' />
+			<input type = 'text' class = 'form-control' placeholder = 'SEARCH' ng-model = 'searchKeyword' />
 			<input type = 'checkbox' class = 'form-check-input' ng-model = 'filterCriteria' /><label>Sort by Packet Arrival Time</label>
 		</div>
 		
@@ -48,7 +48,7 @@
 			</thead>
 			
 			<tbody>
-				<tr ng-repeat = 'item in items | orderBy: "time_accessed" : filterCriteria'>
+				<tr ng-repeat = 'item in items | filter: searchKeyword | orderBy: "time_accessed" : filterCriteria'>
 					<td>{{$index + 1}}</td>
 					<td>{{item.name}}</td>
 					<td>{{item.origin}}</td>

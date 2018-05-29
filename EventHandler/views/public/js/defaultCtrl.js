@@ -6,6 +6,12 @@ angular.module('syookApp')
 	$scope.success_pkts = 0
 	$scope.failure_pkts = 0
 	
+	//I don't want too many elements
+	if ($scope.items.length > 100)
+	{
+		$scope.items = []
+	}
+	
 	
 	var socket = io.connect('http://localhost:3000');
 	socket.on('connect', function()
