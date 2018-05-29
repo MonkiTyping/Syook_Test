@@ -1,7 +1,6 @@
 /* This is the emitter
 */
 
-
 var express = require('express')
 var app = express()
 var server = require('http').Server(app);
@@ -22,10 +21,6 @@ io.on('begin connect', function(data)
 	},8000)
 })
 
-io.on('fuck', function(data)
-{
-	console.log("Fuck", data)
-})
 
 
 server.listen(5000, (req,res) =>

@@ -9,15 +9,21 @@
 		angular.module('syookApp',[])
 	</script>
 	<script src = '/socket.io/socket.io.js'></script>
-	<script>
+	<script src = "js/handleEvent.js"></script>
+	<<!--script>
 		var socket = io.connect('http://localhost:3000');
-		socket.emit('my other event', {data: "LameAF"})
-		socket.on('fuck', function(data)
+		//socket.emit('my other event', {data: "LameAF"})
+		socket.on('good old data', function(data)
 		{
-			console.log("Fuck", data)
+			console.log("Data has been deciphered", data)
+			return data;
+		})
+		socket.on('bad data', function(err)
+		{
+			console.log("Error : ", err['message'])
 		})
 		
-	</script>
+	</script>-->
 		
 	</script>
 	

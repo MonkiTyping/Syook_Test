@@ -9,7 +9,7 @@ var server = require('http').Server(app)
 var io = require('socket.io')(server);
 //var mongoose = require('mongoose')
 
-//app.use(express.static(path.join(__dirname, 'views/public')))
+app.use(express.static(path.join(__dirname, 'views/public/')))
 var dataSink = require('./routes/dataSink.js')		
 
 
@@ -18,8 +18,6 @@ io.on('connection', function(socket)
 	console.log("connected")
 	socket.emit('begin connect')
 	
-	
-	
 	socket.on('encrypted data', function(data)
 	{
 		var encryptedPacket = data['info']
@@ -27,8 +25,16 @@ io.on('connection', function(socket)
 		if (plain_text != {})
 		{
 			console.log("Success")
+			//I'm scared of using the below. I will explain later
+			delete plain_text['secret_key']
+			io.emit('good old data', {data: plain_text})
+		}
+		else
+		{
+			io.emit('bad data', {message: "Transmitted data is corrupted"})
 		}
 	})		
+	
 })
 
 
