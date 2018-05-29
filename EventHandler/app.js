@@ -12,7 +12,7 @@ var io = require('socket.io')(server);
 
 var dataSink = require('./routes/dataSink.js')		
 
-//var encryptedStuff = dataSource()
+
 //var decryptedStuff = dataSink(encryptedStuff)
 
 
@@ -20,13 +20,17 @@ var dataSink = require('./routes/dataSink.js')
 
 io.on('connection', function(socket)
 {
-	console.log("Connected with emitter")
-	
-	
-	socket.emit('begin connect', {start: 'now'})
+		
+	socket.emit('begin connect')
 	socket.on('encrypted data', function(data)
 	{
-		console.log(data)
+		var encryptedPacket = data['info']
+		var plain_text = dataSink(encryptedPacket)
+		if (plain_text != {})
+		{
+			console.log("Success")
+			//Send plain_text to user
+		}
 	})
 		
 })

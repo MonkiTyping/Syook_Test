@@ -64,7 +64,14 @@ function if_transmission_valid(transmission)
 	var transmitted_checksum = CheckSum(transmitted_object)
 	
 	
-	return transmitted_checksum == transmitted_object['secret_key']
+	if (transmitted_checksum == transmitted_object['secret_key'])
+	{
+		return transmitted_object
+	}
+	else
+	{
+		return {}
+	}
 	
 }
 			
