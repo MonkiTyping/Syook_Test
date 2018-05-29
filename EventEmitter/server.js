@@ -18,7 +18,7 @@ io.on('begin connect', function(data)
 	{
 		var payload = dataSource()
 		io.emit('encrypted data', {info: payload}) 
-	},8000)
+	},10000)
 })
 
 

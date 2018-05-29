@@ -40,11 +40,11 @@ function encrypt(text)
 	
 	if ((payload.length - 49 > 0) && (0 < (499 - payload.length)))
 	{
-		return payload
+		return payload	
 	}
 	else
 	{
-		return (crypto.randomBytes(300).toString('hex') + ';;')
+		return crypto.randomBytes(300).toString('hex') + ';;'
 	}
 }
 

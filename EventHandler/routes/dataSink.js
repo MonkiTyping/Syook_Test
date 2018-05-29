@@ -8,11 +8,11 @@ function decrypt(text)
 	var iv = new Buffer(textParts.shift(), 'hex');
 	if (iv.length < 1)
 	{
-		return -1
+		return false
 	}
 	var encryptedText = new Buffer(textParts.join(':'), 'hex');
 	
-	
+	//process.env
 	var hash = crypto.createHash('sha256').update('sY0o0kPasSw0rd4T3st').digest('hex').slice(0,32)
 	var decipher = crypto.createDecipheriv('aes-256-ctr', hash, iv);
 
@@ -37,10 +37,8 @@ function createObjectFrom(items)
 			object[key] = item
 		}
 	})
-	
 	return object
 }
-
 	
 
 function decrypt_payload(transmission)
@@ -50,33 +48,39 @@ function decrypt_payload(transmission)
 	transmission.forEach(function(payload)
 	{
 		payload = payload.split('|')
-		payload.forEach(function(item)
+		// Without '|' the input is incorrect. Assume we have one input which is still an input and a hashed value
+		if (payload.length > 2)
 		{
-			//if (item && item.length > 5) Why item.length > 5 ?
-			if (item)
+			payload.forEach(function(item)
 			{
-				var plain_text = decrypt(item)
-				list.push(plain_text)
-			}
-		})
+				//if (item && item.length > 5) Why item.length > 5 ?
+				if (item)
+				{
+					var plain_text = decrypt(item)
+					list.push(plain_text)
+				}
+			})
+		}
+		else if (payload.length < 2)
+		{
+			console.log("Illegal input", payload)
+			return false
+		}
 	})
 	return createObjectFrom(list)
 }
 
 function if_transmission_valid(transmission)
 {
-	
 	var transmitted_object = decrypt_payload(transmission)
 	var transmitted_checksum = CheckSum(transmitted_object)
-	
-	
-	if (transmitted_checksum == transmitted_object['secret_key'])
+	if (transmitted_checksum && (transmitted_checksum == transmitted_object['secret_key']))
 	{
 		return transmitted_object
 	}
 	else
 	{
-		return {}
+		return false
 	}
 	
 }
