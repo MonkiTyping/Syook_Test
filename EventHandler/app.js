@@ -7,6 +7,7 @@ var server = require('http').Server(app)
 var io = require('socket.io')(server);
 var mongoose = require('mongoose')
 var dotenv = require('dotenv').load();
+var port = process.env.PORT || 3000;
 //Am not checking for process.env.NODE_ENV is production or development
 
 
@@ -24,32 +25,43 @@ var users = require('./routes/users.js')
 var dataSink = require('./routes/dataSink.js')	
 
 
+app.get('/', (req,res) =>
+{
+	res.status(200).send("No content here. Please try logging in by going to /login")
+})
 
 app.use('/', users)	
-app.use('/',function(req,res,next)
+app.use('/stream', (req,res,next) =>
 {
-	var pass = req.body.password || req.headers['x-password'];
-	var name = req.body.name || req.headers['x-name'];
+	var userName = req.body.userName || req.header['userName']
+	var password = req.body.password || req.header['password']
 	
-	console.log(pass,name)
-	
-	if (!pass || !name)
+	if (!(userName && password))
 	{
-		res.status(401).send({'error': "No input"})
+		res.status(403).send("Unauthorzied to access. Illegal input")
+		return
 	}
-	else
-	{ 
-		var hashed_password = crypto.createHash('sha256').update(pass).digest('hex')
-		//There is no authentication going on. This is EXTREMELY INSECURE
-		userModel.findOne({'user': name, 'password' : hashed_password}, function(err,found)
+	password = crypto.createHash(process.env.HASH_METHOD).update(password).digest('hex')
+	
+	userModel.findOne({'user': userName, 'password': password}, function(err,found)
+	{
+		if (err)
+		{
+			console.error('Error finding')
+			res.status(500).send("Server error")
+		}
+		else
 		{
 			if (found)
 			{
-				console.log("Okayed")	
 				next()
 			}
-		})
-	}
+			else
+			{
+				res.status(401).send("Unauthorized")
+			}
+		}
+	})
 })
 app.post('/stream', function(req,res)
 {
@@ -80,20 +92,27 @@ io.on('connection', function(socket)
 			}
 			else (plain_text != {})
 			{
-				console.log("Success")
 				plain_text['time_accessed'] = Date.now()
 				delete plain_text['secret_key']
-				//I'm scared of using the below. I will explain later
+				/*
+				I'm scared of using the below. The below event emits and if the server.js is listening in (client is also listening)
+				it can read these events. Might be because on localhost the socket connected to app.js and server.js are the same,
+				But I don't know for sure. 
+				*/
 				io.emit('good old data', {data: plain_text})
-			}
-			
+			}	
 		}
 	})		
 	
 })
 
 
-server.listen(3000, function(req,res)
+server.listen(port, function(req,res)
 {
-	console.log("Heard")
+	console.log("Listening at ", port)
 });
+
+/*
+No tests are done for server code *.js like app or  server, app.route . Those tests already exist on github
+Tests are done only for the user written functions
+*/

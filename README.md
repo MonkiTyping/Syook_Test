@@ -8,6 +8,19 @@ Problem is as follows.
 > Send the response to the client if and when data gets encrypted
 
 
+#DEPLOYMENT INSTRUCTIONS
+(Ignore the $> while writing the command)
+> Ensure you have the latest versions of git CLI, node (8.x) and npm (5.x) along with mongoDb (3.x) installed.
+> Clone a copy of the code into your local system by $> git clone https://github.com/MonkiTyping/Syook_Test.git
+> Install all the necessary dependencies by $> npm install
+> You have to install them for both the emitter and the listener which are run seperately
+> To run the emitter, go to EventEmitter and type $> node server.js
+> TO run the Listener, go to EventListener and type $> node app.js
+> Once this is done, You can view the output by going to the browser and logging in at http://localhost:3000/login and signing up if need be.
+
+#LEFT_TO_DO
+> Run tests using Mocha /Chai
+> Deploy the applications on Docker
 
 # BASIC EMITTER
 

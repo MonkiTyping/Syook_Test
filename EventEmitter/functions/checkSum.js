@@ -2,7 +2,7 @@ var crypto = require('crypto')
 
 function CheckSum(obj)
 {
-	let hash = crypto.createHash('sha256')
+	let hash = crypto.createHash(process.env.HASH_METHOD)
 	let accumulator = ''
 	for (value in obj)
 	{
@@ -12,8 +12,7 @@ function CheckSum(obj)
 		}
 		accumulator += obj[value]
 	}
-	
-	//hash the object using sha-256
+
 	hash.update(accumulator)
 	var checksum = hash.digest('hex')
 	return checksum

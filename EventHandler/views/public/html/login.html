@@ -17,7 +17,7 @@
 		</div>
 		
 		<div class = 'well'>
-			<form id = "sign_up">
+			<form id = "log_in">
 				<div class = 'form-group'>
 					<label for = 'userName'> Enter the user name </label>
 					<input type = 'text'  id = 'user_name' name = 'userName' class = 'form-control' placeholder = "username" required />
@@ -38,7 +38,7 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script>
-	$('#sign_up').submit(function(e)
+	$('#log_in').submit(function(e)
 	{
 		e.preventDefault();
 		var userName = $('#user_name').val()
@@ -52,12 +52,12 @@
 			{
 				if (data['success'] == true)
 				{
-					console.log("Try logging in")
 					window.localStorage.setItem('userName',userName)
 					window.localStorage.setItem('userPassword', password)
+					console.log(userName, password)
 					//From here on any authenticated routes will be provided the above username and password for basic authorization
 					var form = $('<form action="' + 'stream' + '" method="post">' +
-						'<input type="hidden" name="name" value="' + userName  + '" />' +
+						'<input type="hidden" name="userName" value="' + userName  + '" />' +
 						'<input type="hidden" name="password" value="' + password  + '" />' +
 						'</form>');
 					$('body').append(form);
@@ -65,7 +65,7 @@
 				}
 				else
 				{
-					alert("Failed to login", err['message'])
+					alert("Cannot login. Please check the name or password")
 				}
 			},
 			error: function(err)

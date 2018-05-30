@@ -4,16 +4,16 @@ var CheckSum = require('./checkSum.js')
 
 function decrypt(text) 
 {
+	//Split the encrypted field into : to obtain (e(iv_value, text))	
 	var textParts = text.split(':')
 	var iv = new Buffer(textParts.shift(), 'hex');
 	if (iv.length < 1)
 	{
+		//Remove elements not encrypted in expected manner
 		return false
 	}
 	var encryptedText = new Buffer(textParts.join(':'), 'hex');
 	
-	//process.env
-	//var hash = crypto.createHash('sha256').update('sY0o0kPasSw0rd4T3st').digest('hex').slice(0,32)
 	var hash = crypto.createHash(process.env.HASH_METHOD).update(process.env.CRYPTO_PASSWORD).digest('hex').slice(0,32)
 	var decipher = crypto.createDecipheriv(process.env.ALGORITHM, hash, iv);
 
@@ -49,22 +49,30 @@ function decrypt_payload(transmission)
 	transmission.forEach(function(payload)
 	{
 		payload = payload.split('|')
-		// Without '|' the input is incorrect. Assume we have one input which is still an input and a hashed value
-		if (payload.length > 2)
+	// Without '|' the input is incorrect. Assume we have one input which is -> An input + | +  hashed value
+		if (payload.length >= 2)
 		{
 			payload.forEach(function(item)
 			{
-				//if (item && item.length > 5) Why item.length > 5 ?
 				if (item)
 				{
-					var plain_text = decrypt(item)
+					try
+					{
+						//console.log(item)
+						var plain_text = decrypt(item)
+					}
+					catch (e)
+					{
+						console.log("An error occured during decryption\n\n")
+						console.log(e)
+						return false
+					}
 					list.push(plain_text)
 				}
 			})
 		}
-		else if (payload.length < 2)
+		else
 		{
-			console.log("Illegal input", payload)
 			return false
 		}
 	})

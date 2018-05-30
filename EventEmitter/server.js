@@ -4,8 +4,10 @@
 var express = require('express')
 var app = express()
 var server = require('http').Server(app);
-var io = require('socket.io-client')('http://localhost:3000')
+var io = require('socket.io-client')('http://localhost:3000') 
+//Update localhost:port to the domain where your site is hosted
 var dotenv = require('dotenv').load()
+var port = process.env.PORT || 5000;
 //Am not checking for process.env.NODE_ENV is production or development
 
 
@@ -17,16 +19,35 @@ io.on('connect', function()
 
 io.on('begin connect', function(data)
 {	
+	var wrong_data = 0
 	setInterval(function()
 	{
-		var payload = dataSource()
+		
+		if (wrong_data > 9)
+		{
+			wrong_data = 0	
+			var payload = dataSource(1)
+			
+		}
+		else
+		{
+			wrong_data += 1
+			var payload = dataSource()
+		}
+		
+		
 		io.emit('encrypted data', {info: payload}) 
-	},10000)
+	},5000)
 })
 
 
 
-server.listen(5000, (req,res) =>
+server.listen(port, (req,res) =>
 {
-	console.log("5k hearing")
+	console.log("Emitting from " ,port)
 });
+
+/*
+No tests are done for server code *.js like app or  server, app.route . Those tests already exist on github
+Tests are done only for the user written functions
+*/
