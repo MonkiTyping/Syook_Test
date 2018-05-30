@@ -13,8 +13,9 @@ function decrypt(text)
 	var encryptedText = new Buffer(textParts.join(':'), 'hex');
 	
 	//process.env
-	var hash = crypto.createHash('sha256').update('sY0o0kPasSw0rd4T3st').digest('hex').slice(0,32)
-	var decipher = crypto.createDecipheriv('aes-256-ctr', hash, iv);
+	//var hash = crypto.createHash('sha256').update('sY0o0kPasSw0rd4T3st').digest('hex').slice(0,32)
+	var hash = crypto.createHash(process.env.HASH_METHOD).update(process.env.CRYPTO_PASSWORD).digest('hex').slice(0,32)
+	var decipher = crypto.createDecipheriv(process.env.ALGORITHM, hash, iv);
 
 	var decrypted = decipher.update(encryptedText);
 

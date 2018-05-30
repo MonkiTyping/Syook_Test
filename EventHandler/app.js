@@ -6,6 +6,8 @@ var bodyParser = require('body-parser')
 var server = require('http').Server(app)
 var io = require('socket.io')(server);
 var mongoose = require('mongoose')
+var dotenv = require('dotenv').load();
+//Am not checking for process.env.NODE_ENV is production or development
 
 
 mongoose.connect('mongodb://localhost:27017/syook', function(err,connected)

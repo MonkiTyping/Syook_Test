@@ -53,14 +53,15 @@
 				if (data['success'] == true)
 				{
 					console.log("Try logging in")
-					//window.localStorage.setItem('userName',userName)
-					//window.localStorage.setItem('userPassword', password)
+					window.localStorage.setItem('userName',userName)
+					window.localStorage.setItem('userPassword', password)
+					//From here on any authenticated routes will be provided the above username and password for basic authorization
 					var form = $('<form action="' + 'stream' + '" method="post">' +
 						'<input type="hidden" name="name" value="' + userName  + '" />' +
 						'<input type="hidden" name="password" value="' + password  + '" />' +
 						'</form>');
 					$('body').append(form);
-form.submit();
+					form.submit();
 				}
 				else
 				{

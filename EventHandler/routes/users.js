@@ -19,8 +19,8 @@ router.post('/signUp', (req,res) =>
 router.post('/login', (req,res) =>
 {
 	var userName = req.body.userName;
-	var hashed_password = crypto.createHash('sha256').update(req.body.password).digest('hex')
-	//This is not standard way of checking for password but I'm not seeing passwords on the server
+	var hashed_password = crypto.createHash(process.env.HASH_METHOD).update(req.body.password).digest('hex')
+	//This is not standard way of checking for password but I don't want to be seeing passwords on the server
 	Users.findOne({'user': userName, password: hashed_password}, function(err,found)
 	{
 		if (err)
@@ -45,10 +45,9 @@ router.post('/login', (req,res) =>
 router.post('/signupUser', (req,res) =>
 {
 	var userName = req.body.userName;
-	var password = crypto.createHash('sha256').update(req.body.password).digest('hex')
-	//This is NOT how you do authenitcation. 
-	console.log("Signing up")
+	var password = crypto.createHash(process.env.HASH_METHOD).update(req.body.password).digest('hex')
 	
+	//This is NOT how you do authenitcation. 
 	var new_user = new Users({'user': userName, 'password': password}).save(function(err,safe) 
 	{ 
 		if (err)

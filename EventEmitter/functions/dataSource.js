@@ -30,9 +30,11 @@ function encrypt(text)
 {	
 	var iv = crypto.randomBytes(16);
 	//put in process.env
-	var hash = crypto.createHash('sha256').update('sY0o0kPasSw0rd4T3st').digest('hex').slice(0,32)
+	//var hash = crypto.createHash('sha256').update('sY0o0kPasSw0rd4T3st').digest('hex').slice(0,32)
+	var hash = crypto.createHash(process.env.HASH_METHOD).update(process.env.CRYPTO_PASSWORD).digest('hex').slice(0,32)
+
 	
-	var cipher = crypto.createCipheriv('aes-256-ctr', hash, iv);
+	var cipher = crypto.createCipheriv(process.env.ALGORITHM, hash, iv);
 	var encrypted = cipher.update(text);
 	encrypted = Buffer.concat([encrypted, cipher.final()]);
 
@@ -57,7 +59,13 @@ function prepareTransmission()
 	for( item in object)
 	{
 		var text = item + '=' + object[item];
-		var encrypted_text = encrypt(text) + '|'
+		try{
+			var encrypted_text = encrypt(text) + '|'
+		}
+		catch(e)
+		{
+			console.log(process.env)
+		}
 		transmission += encrypted_text
 	}
 	transmission += ';;'
