@@ -1,17 +1,16 @@
 /* This is the emitter
 */
-
+var dotenv = require('dotenv').load()
 var express = require('express')
 var app = express()
 var server = require('http').Server(app);
 var io = require('socket.io-client')('http://localhost:3000') 
 //Update localhost:port to the domain where your site is hosted
-var dotenv = require('dotenv').load()
 var port = process.env.PORT || 5000;
 //Am not checking for process.env.NODE_ENV is production or development
 
 
-var dataSource = require('./functions/dataSource.js')
+var dataSource = require('./functions/dataSource.js').prepareTransmission
 
 io.on('connect', function()
 {//
@@ -22,7 +21,6 @@ io.on('begin connect', function(data)
 	var wrong_data = 0
 	setInterval(function()
 	{
-		
 		if (wrong_data > 9)
 		{
 			wrong_data = 0	
@@ -34,8 +32,6 @@ io.on('begin connect', function(data)
 			wrong_data += 1
 			var payload = dataSource()
 		}
-		
-		
 		io.emit('encrypted data', {info: payload}) 
 	},5000)
 })

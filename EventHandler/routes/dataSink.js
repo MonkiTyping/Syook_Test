@@ -7,7 +7,7 @@ function decrypt(text)
 	//Split the encrypted field into : to obtain (e(iv_value, text))	
 	var textParts = text.split(':')
 	var iv = new Buffer(textParts.shift(), 'hex');
-	if (iv.length < 1)
+	if (iv.length < 1 || textParts.length != 2)
 	{
 		//Remove elements not encrypted in expected manner
 		return false
@@ -27,6 +27,7 @@ function decrypt(text)
 function createObjectFrom(items)
 {
 	var object = {}
+
 	items.forEach(function(item)
 	{
 		var temp = item.split('=')
@@ -76,12 +77,22 @@ function decrypt_payload(transmission)
 			return false
 		}
 	})
+	if (typeof(list) != 'object' || typeof(list) != 'Array') return false
 	return createObjectFrom(list)
 }
 
 function if_transmission_valid(transmission)
 {
+	if (transmission == undefined || transmission == false || typeof(transmission) != 'string')
+	{
+		return false
+	}
+	
 	var transmitted_object = decrypt_payload(transmission)
+	if (transmitted_object == false)
+	{
+		return false
+	}
 	var transmitted_checksum = CheckSum(transmitted_object)
 	if (transmitted_checksum && (transmitted_checksum == transmitted_object['secret_key']))
 	{
@@ -94,4 +105,9 @@ function if_transmission_valid(transmission)
 	
 }
 			
-module.exports = if_transmission_valid
+module.exports = 
+{
+	decrypt_payload,
+	decrypt,
+	if_transmission_valid
+}

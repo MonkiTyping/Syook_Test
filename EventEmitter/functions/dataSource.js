@@ -1,11 +1,13 @@
 var crypto = require('crypto')
 var CheckSum = require('./checkSum.js')
 
+
 /*
 Generate the data of as {name: '*', origin: '*', destination: '*'}
 Hash the data ie Checksum and append to the above object
 Encrypt the payload using algorithm
 */
+
 
 function get_random_values()
 {
@@ -47,15 +49,7 @@ function encrypt(text)
 
 	var payload = iv.toString('hex') + ':' + encrypted.toString('hex');
 	
-	if ((payload.length > 49) && (payload.length < 500))
-	{
-		return payload	
-	}
-	else
-	{
-		//Return erroneous data
-		return crypto.randomBytes(300).toString('hex') + ';;'
-	}
+	return 
 }
 
 function prepareTransmission(valid = 0)
@@ -77,7 +71,7 @@ function prepareTransmission(valid = 0)
 			}
 			else
 			{
-				//Generate faulty values
+				//Generate faulty values every x seconds
 				var encrypted_text = encrypt(encrypt(text)) + "|"
 			}
 				
@@ -91,9 +85,23 @@ function prepareTransmission(valid = 0)
 	}
 	transmission += ';;'
 	
-	return transmission
+	//If length of transmission is legal, send it. Otherwise send a random string
+	if ((transmission.length > 49) && (transmission.length < 500))
+	{
+		return transmission
+	}
+	else
+	{
+		//If length is invalid generate random incorrect string
+		transmission =  crypto.randomBytes(100).toString('hex') + '|' + crypto.randomBytes(150).toString('hex') + '|;;'
+		return transmission
+	}
 }
 		
 
-
-module.exports = prepareTransmission;
+module.exports =
+{
+	get_random_values,
+	encrypt,
+	prepareTransmission
+}

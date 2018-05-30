@@ -4,7 +4,7 @@
   "description": "The application for the test asked by Syook",
   "main": "app.js",
   "scripts": {
-    "test": "node app.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "body-parser": "^1.18.3",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "mocha": "^5.2.0",
     "mongoose": "^5.1.2",
     "nodemon": "^1.17.5",
     "path": "^0.12.7",

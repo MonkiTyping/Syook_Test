@@ -8,6 +8,8 @@ var io = require('socket.io')(server);
 var mongoose = require('mongoose')
 var dotenv = require('dotenv').load();
 var port = process.env.PORT || 3000;
+//var favicon = require('servce-favicon')
+
 //Am not checking for process.env.NODE_ENV is production or development
 
 
@@ -22,7 +24,7 @@ app.use(bodyParser.json())
 
 var userModel = require('./models/userData.js')
 var users = require('./routes/users.js')
-var dataSink = require('./routes/dataSink.js')	
+var dataSink = require('./routes/dataSink.js').if_transmission_valid	
 
 
 app.get('/', (req,res) =>
@@ -33,6 +35,14 @@ app.get('/', (req,res) =>
 app.use('/', users)	
 app.use('/stream', (req,res,next) =>
 {
+	/*
+	Authentication is done here.
+	Very basic.
+	Whenever a user logs in , his client will store some information. In this case it is simply the username and password.
+	For every authenticated route, He needs to send the above information which is checked in the db.
+	Ideally, Authetication is nowhere like the above
+	*/
+	
 	var userName = req.body.userName || req.header['userName']
 	var password = req.body.password || req.header['password']
 	
@@ -67,8 +77,6 @@ app.post('/stream', function(req,res)
 {
 	res.sendfile('./views/public/html/index.html')
 })
- 
-	
 
 
 io.on('connection', function(socket)

@@ -21,7 +21,10 @@ router.post('/login', (req,res) =>
 	var userName = req.body.userName;
 	var hashed_password = crypto.createHash(process.env.HASH_METHOD).update(req.body.password).digest('hex')
 
-	//This is not standard way of checking for password but I don't want to be seeing passwords on the server
+	/*
+	This is not standard way of checking for password but I don't want to be seeing passwords on the server
+	What I do is on receiving the password, hash it and store it.
+	*/
 	Users.findOne({'user': userName, password: hashed_password}, function(err,found)
 	{
 		if (err)
