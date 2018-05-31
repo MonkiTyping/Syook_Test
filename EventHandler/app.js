@@ -16,11 +16,11 @@ var port = process.env.PORT || 3000;
 //replace the domain name with localhost for development
 
 mongoose.connect('mongodb://mongoDB/syook', function(err,connected)
-//mongoose.connect('mongodb://localhost/syook')
-.catch(function(err)
+//mongoose.connect('mongodb://localhost/syook', function(err,connected)
 {
-	console.log(err)
+	if (err) console.log("DB CONNECTION PROBLEM")
 })
+
 
 //app.use('/', express.static(__dirname, 'views/public/'))
 app.use(express.static('views/public'))
