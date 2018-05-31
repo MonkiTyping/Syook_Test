@@ -7,8 +7,9 @@ angular.module('syookApp')
 	$scope.failure_pkts = 0
 	
 	
-	
-	var socket = io.connect('http://localhost:3000');
+	//Needs the connection to the correct domain. Don't forget to replace it.
+	var socket = io.connect('http://192.168.99.100:3000');
+	//var socket = io.connect('http://localhost:3000');
 	socket.on('connect', function()
 	{
 		$scope.items = []

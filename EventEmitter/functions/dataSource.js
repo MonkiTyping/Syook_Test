@@ -49,7 +49,7 @@ function encrypt(text)
 
 	var payload = iv.toString('hex') + ':' + encrypted.toString('hex');
 	
-	return 
+	return payload
 }
 
 function prepareTransmission(valid = 0)
@@ -92,6 +92,7 @@ function prepareTransmission(valid = 0)
 	}
 	else
 	{
+		console.log("Erroneous pkt returned")
 		//If length is invalid generate random incorrect string
 		transmission =  crypto.randomBytes(100).toString('hex') + '|' + crypto.randomBytes(150).toString('hex') + '|;;'
 		return transmission

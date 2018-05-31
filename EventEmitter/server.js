@@ -4,7 +4,9 @@ var dotenv = require('dotenv').load()
 var express = require('express')
 var app = express()
 var server = require('http').Server(app);
-var io = require('socket.io-client')('http://localhost:3000') 
+//The address io is bounded to is the address of the 'emitter'. 
+var io = require('socket.io-client')('http://192.168.99.100:3000') 
+//var io = require('socket.io-client')('http://localhost:3000')
 //Update localhost:port to the domain where your site is hosted
 var port = process.env.PORT || 5000;
 //Am not checking for process.env.NODE_ENV is production or development
@@ -33,7 +35,7 @@ io.on('begin connect', function(data)
 			var payload = dataSource()
 		}
 		io.emit('encrypted data', {info: payload}) 
-	},5000)
+	},10000)
 })
 
 app.all('/', function(req,res)

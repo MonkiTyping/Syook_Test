@@ -14,9 +14,12 @@ var port = process.env.PORT || 3000;
 
 //docker has an issue with connecting to mongodb instance in windows
 //replace the domain name with localhost for development
+
 mongoose.connect('mongodb://mongoDB/syook', function(err,connected)
+//mongoose.connect('mongodb://localhost/syook')
+.catch(function(err)
 {
-	if (err) console.log("Error establishing db connection")
+	console.log(err)
 })
 
 //app.use('/', express.static(__dirname, 'views/public/'))
@@ -58,6 +61,7 @@ io.on('connection', function(socket)
 		}
 		else
 		{
+			
 			var plain_text = dataSink(encryptedPacket)
 			if (plain_text == false)
 			{

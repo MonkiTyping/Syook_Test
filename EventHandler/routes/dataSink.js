@@ -7,19 +7,26 @@ function decrypt(text)
 	//Split the encrypted field into : to obtain (e(iv_value, text))	
 	var textParts = text.split(':')
 	var iv = new Buffer(textParts.shift(), 'hex');
-	if (iv.length < 1 || textParts.length != 2)
+	if (iv.length < 1)
 	{
 		//Remove elements not encrypted in expected manner
 		return false
 	}
 	var encryptedText = new Buffer(textParts.join(':'), 'hex');
 	
-	var hash = crypto.createHash(process.env.HASH_METHOD).update(process.env.CRYPTO_PASSWORD).digest('hex').slice(0,32)
-	var decipher = crypto.createDecipheriv(process.env.ALGORITHM, hash, iv);
+	try
+	{
+		var hash = crypto.createHash(process.env.HASH_METHOD).update(process.env.CRYPTO_PASSWORD).digest('hex').slice(0,32)
+		var decipher = crypto.createDecipheriv(process.env.ALGORITHM, hash, iv);
 
-	var decrypted = decipher.update(encryptedText);
+		var decrypted = decipher.update(encryptedText);
 
-	decrypted = Buffer.concat([decrypted, decipher.final()]);
+		decrypted = Buffer.concat([decrypted, decipher.final()]);
+	}
+	catch (e)
+	{
+		decrypted = ''
+	}
 
 	return decrypted.toString();
 }
@@ -50,8 +57,12 @@ function decrypt_payload(transmission)
 	transmission.forEach(function(payload)
 	{
 		payload = payload.split('|')
-	// Without '|' the input is incorrect. Assume we have one input which is -> An input + | +  hashed value
-		if (payload.length >= 2)
+		// Without '|' the input is incorrect. Assume we have one input which is -> An input + | +  hashed value
+		if (payload.length < 2)
+		{
+			return false
+		}
+		else
 		{
 			payload.forEach(function(item)
 			{
@@ -72,23 +83,22 @@ function decrypt_payload(transmission)
 				}
 			})
 		}
-		else
-		{
-			return false
-		}
 	})
-	if (typeof(list) != 'object' || typeof(list) != 'Array') return false
+	//if (typeof(list) != 'object' || typeof(list) != 'Array') return false
 	return createObjectFrom(list)
 }
 
 function if_transmission_valid(transmission)
 {
-	if (transmission == undefined || transmission == false || typeof(transmission) != 'string')
+	
+	if (transmission == undefined || transmission == false)
 	{
 		return false
 	}
 	
+	
 	var transmitted_object = decrypt_payload(transmission)
+	
 	if (transmitted_object == false)
 	{
 		return false
