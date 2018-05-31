@@ -12,18 +12,21 @@ var port = process.env.PORT || 3000;
 
 //Am not checking for process.env.NODE_ENV is production or development
 
-
-mongoose.connect('mongodb://localhost:27017/syook', function(err,connected)
+//docker has an issue with connecting to mongodb instance in windows
+//replace the domain name with localhost for development
+mongoose.connect('mongodb://mongoDB/syook', function(err,connected)
 {
-	if (err) console.log("Error establishing db connection", err)
+	if (err) console.log("Error establishing db connection")
 })
 
-app.use(express.static(path.join(__dirname, 'views/public/')))
+//app.use('/', express.static(__dirname, 'views/public/'))
+app.use(express.static('views/public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 var userModel = require('./models/userData.js')
 var users = require('./routes/users.js')
+var auth = require('./routes/auth.js')
 var dataSink = require('./routes/dataSink.js').if_transmission_valid	
 
 
@@ -33,49 +36,11 @@ app.get('/', (req,res) =>
 })
 
 app.use('/', users)	
-app.use('/stream', (req,res,next) =>
+app.use('/stream',auth)
+//Authentication required
+app.get('/stream', function(req,res)
 {
-	/*
-	Authentication is done here.
-	Very basic.
-	Whenever a user logs in , his client will store some information. In this case it is simply the username and password.
-	For every authenticated route, He needs to send the above information which is checked in the db.
-	Ideally, Authetication is nowhere like the above
-	*/
-	
-	var userName = req.body.userName || req.header['userName']
-	var password = req.body.password || req.header['password']
-	
-	if (!(userName && password))
-	{
-		res.status(403).send("Unauthorzied to access. Illegal input")
-		return
-	}
-	password = crypto.createHash(process.env.HASH_METHOD).update(password).digest('hex')
-	
-	userModel.findOne({'user': userName, 'password': password}, function(err,found)
-	{
-		if (err)
-		{
-			console.error('Error finding')
-			res.status(500).send("Server error")
-		}
-		else
-		{
-			if (found)
-			{
-				next()
-			}
-			else
-			{
-				res.status(401).send("Unauthorized")
-			}
-		}
-	})
-})
-app.post('/stream', function(req,res)
-{
-	res.sendfile('./views/public/html/index.html')
+	res.sendFile(path.join(__dirname, './views/public/html', 'index.html'))
 })
 
 

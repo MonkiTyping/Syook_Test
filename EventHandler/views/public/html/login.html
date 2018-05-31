@@ -54,7 +54,6 @@
 				{
 					window.localStorage.setItem('userName',userName)
 					window.localStorage.setItem('userPassword', password)
-					console.log(userName, password)
 					//From here on any authenticated routes will be provided the above username and password for basic authorization
 					var form = $('<form action="' + 'stream' + '" method="post">' +
 						'<input type="hidden" name="userName" value="' + userName  + '" />' +

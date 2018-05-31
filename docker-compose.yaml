@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  handler:
+    build: './EventHandler'
+    command: npm start
+    ports:
+     - "3000:3000"
+    links:
+     - emitter
+     - mongoDB
+  emitter:
+    build: './EventEmitter'
+    command: npm start
+    ports:
+     - "5000:5000"
+  mongoDB: 
+    image: mongo
+    volumes:
+     - ./data:/data/db
+    ports:
+     - "27017"

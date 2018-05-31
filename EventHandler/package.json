@@ -2,8 +2,9 @@
   "name": "syook-test",
   "version": "1.0.0",
   "description": "The application for the test asked by Syook",
-  "main": "app.js",
+  "main": "node app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "mocha"
   },
   "repository": {
@@ -22,9 +23,7 @@
     "express": "^4.16.3",
     "mocha": "^5.2.0",
     "mongoose": "^5.1.2",
-    "nodemon": "^1.17.5",
     "path": "^0.12.7",
-    "socket-io": "^1.0.0",
     "socket.io": "^2.1.1"
   }
 }

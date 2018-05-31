@@ -3,17 +3,18 @@ var express = require('express')
 var router = express.Router()
 var bodyParser = require('body-parser')
 var crypto = require('crypto')
+var path = require('path')
 
 var Users = require('../models/userData.js')
 
 router.get('/login', (req,res) =>
 {
-	res.sendfile('./views/public/html/login.html')
+	res.sendFile(path.join(__dirname, '../views/public/html', 'login.html'))
 })
 
 router.post('/signUp', (req,res) =>
 {
-	res.sendfile('./views/public/html/signUp.html')
+	res.sendFile(path.join(__dirname, '../views/public/html', 'signUp.html'))
 })
 
 router.post('/login', (req,res) =>

@@ -36,7 +36,10 @@ io.on('begin connect', function(data)
 	},5000)
 })
 
-
+app.all('/', function(req,res)
+{
+	res.status(200).send("This server only simulates the sending of data")
+})
 
 server.listen(port, (req,res) =>
 {
