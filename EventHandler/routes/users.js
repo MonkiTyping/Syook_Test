@@ -14,7 +14,7 @@ router.get('/login', (req,res) =>
 
 router.post('/signUp', (req,res) =>
 {
-	res.sendFile(path.join(__dirname, '../views/public/html', 'signUp.html'))
+	res.sendFile(path.join(__dirname, '../views/public/html', 'signup.html'))
 })
 
 router.post('/login', (req,res) =>

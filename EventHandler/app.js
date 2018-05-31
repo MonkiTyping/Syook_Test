@@ -38,7 +38,7 @@ app.get('/', (req,res) =>
 app.use('/', users)	
 app.use('/stream',auth)
 //Authentication required
-app.get('/stream', function(req,res)
+app.post('/stream', function(req,res)
 {
 	res.sendFile(path.join(__dirname, './views/public/html', 'index.html'))
 })
